@@ -280,22 +280,23 @@ struct Builder<'a>(&'a mut svgtypes::Path);
 
 impl ttf::OutlineBuilder for Builder<'_> {
     fn move_to(&mut self, x: f32, y: f32) {
-        self.0.push_move_to(x as f64, y as f64);
+        self.0.push_move_to(x as f64, -y as f64);
     }
 
     fn line_to(&mut self, x: f32, y: f32) {
-        self.0.push_line_to(x as f64, y as f64);
+        self.0.push_line_to(x as f64, -y as f64);
     }
 
     fn quad_to(&mut self, x1: f32, y1: f32, x: f32, y: f32) {
-        self.0.push_quad_to(x1 as f64, y1 as f64, x as f64, y as f64);
+        self.0.push_quad_to(x1 as f64, -y1 as f64, x as f64, -y as f64);
     }
 
     fn curve_to(&mut self, x1: f32, y1: f32, x2: f32, y2: f32, x: f32, y: f32) {
-        self.0.push_curve_to(x1 as f64, y1 as f64, x2 as f64, y2 as f64, x as f64, y as f64);
+        self.0.push_curve_to(x1 as f64, -y1 as f64, x2 as f64, -y2 as f64, x as f64, -y as f64);
     }
 
     fn close(&mut self) {
         self.0.push_close_path();
     }
 }
+
