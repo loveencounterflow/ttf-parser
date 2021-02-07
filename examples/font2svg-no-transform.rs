@@ -243,7 +243,6 @@ fn glyph_to_path(
 ) {
     path_buf.clear();
     let mut builder = Builder(path_buf);
-
     let bbox = match face.outline_glyph(glyph_id, &mut builder) {
         Some(v) => v,
         None => return,
@@ -254,7 +253,6 @@ fn glyph_to_path(
         scale_segment( seg, scale );
         };
     // println!("path_buf: B {}", path_buf );
-
 
     // ### TAINT computation only needed for DRAW_BBOX
     let bbox_w = (bbox.x_max as f64 - bbox.x_min as f64) * scale;
