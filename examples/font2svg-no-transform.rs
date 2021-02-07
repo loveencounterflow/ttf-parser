@@ -119,8 +119,6 @@ fn process(args: Args) -> Result<(), Box<dyn std::error::Error>> {
         format_args!("{} {} {} {}", 0, 0, cell_size * COLUMNS as f64, cell_size * rows as f64),
     );
 
-    // const transform:svgtypes::Transform = svgtypes::new_scale( 1.0 as f64, -1.0 as f64 );
-
     if DRAW_GRID { draw_grid(face.number_of_glyphs(), cell_size, &mut svg); }
 
     let mut path_buf = svgtypes::Path::with_capacity(64);
