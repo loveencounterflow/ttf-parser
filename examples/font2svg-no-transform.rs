@@ -8,6 +8,7 @@ use std::io::Write;
 
 use ttf_parser as ttf;
 use svgtypes::WriteBuffer;
+use svgtypes::PathSegment;
 
 const FONT_SIZE: f64 = 1000.0;
 const COLUMNS: u32 = 16;
@@ -242,11 +243,18 @@ fn glyph_to_path(
 ) {
     path_buf.clear();
     let mut builder = Builder(path_buf);
-    // ### TAINT computation only needed for DRAW_BBOX
+
     let bbox = match face.outline_glyph(glyph_id, &mut builder) {
         Some(v) => v,
         None => return,
     };
+
+    // println!("path_buf: A {}", path_buf );
+    for seg in path_buf.iter_mut() {
+        scale_segment( seg, scale );
+        };
+    // println!("path_buf: B {}", path_buf );
+
 
     // ### TAINT computation only needed for DRAW_BBOX
     let bbox_w = (bbox.x_max as f64 - bbox.x_min as f64) * scale;
@@ -303,3 +311,51 @@ impl ttf::OutlineBuilder for Builder<'_> {
     }
 }
 
+// ---------------------------------------------------------------------------------------------------------
+fn scale_segment(d: &mut PathSegment, scale: f64 ) {
+    match *d {
+        PathSegment::MoveTo { ref mut x, ref mut y, .. } => {
+            *x *= scale;
+            *y *= scale;
+        }
+        PathSegment::LineTo { ref mut x, ref mut y, .. } => {
+            *x *= scale;
+            *y *= scale;
+        }
+        PathSegment::HorizontalLineTo { ref mut x, .. } => {
+            *x *= scale;
+        }
+        PathSegment::VerticalLineTo { ref mut y, .. } => {
+            *y *= scale;
+        }
+        PathSegment::CurveTo { ref mut x1, ref mut y1, ref mut x2, ref mut y2, ref mut x, ref mut y, .. } => {
+            *x1 *= scale;
+            *y1 *= scale;
+            *x2 *= scale;
+            *y2 *= scale;
+            *x  *= scale;
+            *y  *= scale;
+        }
+        PathSegment::SmoothCurveTo { ref mut x2, ref mut y2, ref mut x, ref mut y, .. } => {
+            *x2 *= scale;
+            *y2 *= scale;
+            *x  *= scale;
+            *y  *= scale;
+        }
+        PathSegment::Quadratic { ref mut x1, ref mut y1, ref mut x, ref mut y, .. } => {
+            *x1 *= scale;
+            *y1 *= scale;
+            *x  *= scale;
+            *y  *= scale;
+        }
+        PathSegment::SmoothQuadratic { ref mut x, ref mut y, .. } => {
+            *x *= scale;
+            *y *= scale;
+        }
+        PathSegment::EllipticalArc { ref mut x, ref mut y, .. } => {
+            *x *= scale;
+            *y *= scale;
+        }
+        PathSegment::ClosePath { .. } => {}
+    }
+}
