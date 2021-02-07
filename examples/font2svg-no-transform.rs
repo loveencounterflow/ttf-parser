@@ -14,6 +14,7 @@ const COLUMNS: u32 = 16;
 // set `MAX_ID = 0` to include all outlines
 const MAX_ID: u32 = 127;
 const DRAW_GRID: bool = false;
+const DRAW_BBOX: bool = false;
 const LABEL_FONT_SIZE: &str = "250";
 
 
@@ -241,11 +242,13 @@ fn glyph_to_path(
 ) {
     path_buf.clear();
     let mut builder = Builder(path_buf);
+    // ### TAINT computation only needed for DRAW_BBOX
     let bbox = match face.outline_glyph(glyph_id, &mut builder) {
         Some(v) => v,
         None => return,
     };
 
+    // ### TAINT computation only needed for DRAW_BBOX
     let bbox_w = (bbox.x_max as f64 - bbox.x_min as f64) * scale;
     let dx = (cell_size - bbox_w) / 2.0;
     let y = y + cell_size + face.descender() as f64 * scale;
@@ -253,14 +256,14 @@ fn glyph_to_path(
     let mut ts = svgtypes::Transform::default();
     ts.translate(x + dx, y);
     // ts.scale(1.0, -1.0);
-    ts.scale(scale, scale);
+    // ts.scale(scale, scale);
 
     svg.start_element("path");
     svg.write_attribute_raw("d", |buf| path_buf.write_buf(buf));
     svg.write_attribute_raw("transform", |buf| ts.write_buf(buf));
     svg.end_element();
 
-    {
+    if DRAW_BBOX {
         let bbox_h = (bbox.y_max as f64 - bbox.y_min as f64) * scale;
         let bbox_x = x + dx + bbox.x_min as f64 * scale;
         let bbox_y = y - bbox.y_max as f64 * scale;
@@ -273,7 +276,7 @@ fn glyph_to_path(
         svg.write_attribute("fill", "none");
         svg.write_attribute("stroke", "green");
         svg.end_element();
-    }
+    };
 }
 
 struct Builder<'a>(&'a mut svgtypes::Path);
