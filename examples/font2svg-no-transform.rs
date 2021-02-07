@@ -13,7 +13,7 @@ use svgtypes::PathSegment;
 const FONT_SIZE: f64 = 1000.0;
 const COLUMNS: u32 = 16;
 // set `MAX_ID = 0` to include all outlines
-const MAX_ID: u32 = 1024;
+const MAX_ID: u32 = 2048;
 const DRAW_GRID: bool = false;
 const DRAW_BBOX: bool = false;
 const LABEL_FONT_SIZE: &str = "250";
