@@ -1,4 +1,25 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Fork of `ttf-parser` to Convert Font Glyf Outlines as SVG](#fork-of-ttf-parser-to-convert-font-glyf-outlines-as-svg)
+  - [ttf-parser](#ttf-parser)
+    - [Features](#features)
+    - [Safety](#safety)
+    - [Alternatives](#alternatives)
+    - [Performance](#performance)
+    - [License](#license)
+    - [Contribution](#contribution)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
+
+# Fork of `ttf-parser` to Convert Font Glyf Outlines as SVG
+
+
 ## ttf-parser
+
 ![Build Status](https://github.com/RazrFalcon/ttf-parser/workflows/Rust/badge.svg)
 [![Crates.io](https://img.shields.io/crates/v/ttf-parser.svg)](https://crates.io/crates/ttf-parser)
 [![Documentation](https://docs.rs/ttf-parser/badge.svg)](https://docs.rs/ttf-parser)
