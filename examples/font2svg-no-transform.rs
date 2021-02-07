@@ -13,10 +13,12 @@ use svgtypes::PathSegment;
 const FONT_SIZE: f64 = 1000.0;
 const COLUMNS: u32 = 16;
 // set `MAX_ID = 0` to include all outlines
-const MAX_ID: u32 = 127;
+const MAX_ID: u32 = 1024;
 const DRAW_GRID: bool = false;
 const DRAW_BBOX: bool = false;
 const LABEL_FONT_SIZE: &str = "250";
+// 1.0 for integers, 100.0 for two decimal places &c
+const PRECISION: f64 = 1.0;
 
 
 const HELP: &str = "\
@@ -129,7 +131,7 @@ fn process(args: Args) -> Result<(), Box<dyn std::error::Error>> {
     for id in 0..face.number_of_glyphs() {
         let x = column as f64 * cell_size;
         let y = row as f64 * cell_size;
-        if MAX_ID > 0 && id > 128 {
+        if MAX_ID > 0 && id as u32 > MAX_ID {
             break;
         }
         svg.start_element("text");
@@ -313,46 +315,46 @@ impl ttf::OutlineBuilder for Builder<'_> {
 fn scale_segment(d: &mut PathSegment, scale: f64 ) {
     match *d {
         PathSegment::MoveTo { ref mut x, ref mut y, .. } => {
-            *x *= scale;
-            *y *= scale;
+            *x  = ( *x * scale * PRECISION ).round() / PRECISION;
+            *y  = ( *y * scale * PRECISION ).round() / PRECISION;
         }
         PathSegment::LineTo { ref mut x, ref mut y, .. } => {
-            *x *= scale;
-            *y *= scale;
+            *x  = ( *x * scale * PRECISION ).round() / PRECISION;
+            *y  = ( *y * scale * PRECISION ).round() / PRECISION;
         }
         PathSegment::HorizontalLineTo { ref mut x, .. } => {
-            *x *= scale;
+            *x  = ( *x * scale * PRECISION ).round() / PRECISION;
         }
         PathSegment::VerticalLineTo { ref mut y, .. } => {
-            *y *= scale;
+            *y  = ( *y * scale * PRECISION ).round() / PRECISION;
         }
         PathSegment::CurveTo { ref mut x1, ref mut y1, ref mut x2, ref mut y2, ref mut x, ref mut y, .. } => {
-            *x1 *= scale;
-            *y1 *= scale;
-            *x2 *= scale;
-            *y2 *= scale;
-            *x  *= scale;
-            *y  *= scale;
+            *x1 = ( *x1 * scale * PRECISION ).round() / PRECISION;
+            *y1 = ( *y1 * scale * PRECISION ).round() / PRECISION;
+            *x2 = ( *x2 * scale * PRECISION ).round() / PRECISION;
+            *y2 = ( *y2 * scale * PRECISION ).round() / PRECISION;
+            *x  = ( *x * scale * PRECISION ).round() / PRECISION;
+            *y  = ( *y * scale * PRECISION ).round() / PRECISION;
         }
         PathSegment::SmoothCurveTo { ref mut x2, ref mut y2, ref mut x, ref mut y, .. } => {
-            *x2 *= scale;
-            *y2 *= scale;
-            *x  *= scale;
-            *y  *= scale;
+            *x2 = ( *x2 * scale * PRECISION ).round() / PRECISION;
+            *y2 = ( *y2 * scale * PRECISION ).round() / PRECISION;
+            *x  = ( *x * scale * PRECISION ).round() / PRECISION;
+            *y  = ( *y * scale * PRECISION ).round() / PRECISION;
         }
         PathSegment::Quadratic { ref mut x1, ref mut y1, ref mut x, ref mut y, .. } => {
-            *x1 *= scale;
-            *y1 *= scale;
-            *x  *= scale;
-            *y  *= scale;
+            *x1 = ( *x1 * scale * PRECISION ).round() / PRECISION;
+            *y1 = ( *y1 * scale * PRECISION ).round() / PRECISION;
+            *x  = ( *x * scale * PRECISION ).round() / PRECISION;
+            *y  = ( *y * scale * PRECISION ).round() / PRECISION;
         }
         PathSegment::SmoothQuadratic { ref mut x, ref mut y, .. } => {
-            *x *= scale;
-            *y *= scale;
+            *x  = ( *x * scale * PRECISION ).round() / PRECISION;
+            *y  = ( *y * scale * PRECISION ).round() / PRECISION;
         }
         PathSegment::EllipticalArc { ref mut x, ref mut y, .. } => {
-            *x *= scale;
-            *y *= scale;
+            *x  = ( *x * scale * PRECISION ).round() / PRECISION;
+            *y  = ( *y * scale * PRECISION ).round() / PRECISION;
         }
         PathSegment::ClosePath { .. } => {}
     }
