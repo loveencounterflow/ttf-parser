@@ -23,3 +23,15 @@ base64 = "0.12"
 pico-args = "0.3.1"
 svgtypes = "0.5"
 xmlwriter = "0.1"
+
+# [profile.release]
+# opt-level = 3
+# debug = false
+# rpath = false
+# lto = false
+# debug-assertions = false
+# codegen-units = 16
+# panic = 'unwind'
+# incremental = false
+# overflow-checks = false
+
